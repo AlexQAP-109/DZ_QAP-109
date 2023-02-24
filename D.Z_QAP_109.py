@@ -1,38 +1,61 @@
-# Домашнее задание 18.8.19 Студент: Александр.QAP-109.
+#######################################################################################################
+#Напишите программу, которая получает от пользователя имя файла, открывает этот файл
+# в текущем каталоге, читает его и выводит два слова: наиболее часто встречающееся из тех,
+# что имеют размер более трех символов, и наиболее длинное слово .
+####################################################################################
 
-kolichesto_biletov = int(input('Сколько билетов вы хотите приобрести?\nВведите количество :'))
-vozrast = [int(input('Укажите возраст участников:')) for i in range(kolichesto_biletov)]
-vozrast_do_18 = 0
-vozrast_do_25 = 990
-vozrast_ot_25 = 1390
-summa = 0
+n = input('Название файла: ')
+with open(n, encoding='utf8') as f:
+    n = f.read()
 
-for i in range(0, kolichesto_biletov >= 3):
-    i = kolichesto_biletov
-    for i in vozrast:
-        if 18 <= i < 25:
-            i = vozrast_do_25 - (990 * 10 / 100)
-            summa = summa + i
-        elif 25 <= i < 100:
-            i = vozrast_ot_25 - (1390 * 10 / 100)
-            summa = summa + i
-        elif 1 <= i < 18:
-            i = vozrast_do_18
-            summa = summa + i
-            print()
-    print('У вас бонус - 10 % . Ваша сумма к оплате', int(summa),"руб")
-for i in range(0, kolichesto_biletov < 3 and not 0):
-    i = kolichesto_biletov
-    for i in vozrast:
-        if 18 <= i < 25:
-            i = vozrast_do_25
-            summa = summa + i
-        elif 25 <= i < 100:
-            i = vozrast_ot_25
-            summa = summa + i
-        elif 1 <= i < 18:
-            i = vozrast_do_18
-            summa = summa + i
-            print()
-    print('К сожалению у вас нет бонуса -10 % . Ваша сумма к оплате', int(summa),"руб")
+
+def ochistka_texta(ns1):
+    for i in '!"\'#$%&()*+-,/.:;<=>?@[\\]^_{|}~':
+        ns = n.replace(i, '')
+    return n.split()
+
+ns1 = ochistka_texta(n)
+
+################ Ограничиваем список значениями из 3 букв
+def ogranuchenie_3_buk(ns1):
+    ns = []
+    for i in ns1:
+        if len(i) > 3 :
+            ns.append(i)
+    return ns
+
+ns = ogranuchenie_3_buk(ns1)
+
+dlinnoe_slovo = max(ns, key=len)
+print(f'Самое длинное слово:   "{dlinnoe_slovo}"')
+#Переводим список в словарь
+def slovar(nss):
+    slovar1 = {}
+    for i in ns:
+        if i in slovar1:
+            slovar1[i] += 1
+        else:
+            slovar1[i] = 1
+    return slovar1
+
+nss = slovar(ns)
+
+#Функция которая переберет словарь и выдаст частые повторяющиеся слова по цифре
+def chastue_slova(slovo):
+    for i  in nss.values():
+        if i == max(nss.values()):
+            slovo = i
+
+    return slovo
+slovo = chastue_slova(nss)
+
+
+#Функция на определение соответствующего ключа
+def opredelenie(nss,slovo):
+    for i, d in nss.items():
+        if (d == slovo):
+            return i
+
+urra = opredelenie(nss,slovo)
+print(f'Самое часто встречающееся слово ---"{urra}" --- втречается --- "{slovo}"  раза')
 
